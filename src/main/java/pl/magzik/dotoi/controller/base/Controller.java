@@ -100,6 +100,7 @@ public class Controller {
      * Displays an error dialog with the provided context text.
      * @param contextText the context text for the error dialog
      */
+    @Deprecated
     public void showErrorDialog(String contextText) { ///< TODO: Move to another class?
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(TranslationManager.getInstance().translate("general.alert.error.title"));
