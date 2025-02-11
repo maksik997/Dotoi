@@ -8,6 +8,8 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.magzik.dotoi.controller.base.Controller;
+import pl.magzik.dotoi.manager.WindowManager;
+import pl.magzik.dotoi.view.TaskListWindow;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -37,6 +39,9 @@ public class DotoiApplication extends Application {
 
         setupStage(stage, scene, bundle);
         log.info("GUI initialized successfully.");
+
+        WindowManager.getInstance().openWindow("general.title", new TaskListWindow());
+
     }
 
     /**

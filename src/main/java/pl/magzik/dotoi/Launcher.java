@@ -9,6 +9,6 @@ public class Launcher {
         Path logPath = PathResolver.getInstance().getLogDirectory();
         System.setProperty("logPath", logPath.toString());
 
-        DotoiApplication.main(args);
+        DotoiApplication.main(args); ///< Will be switched for tray
     }
 }

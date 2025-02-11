@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.magzik.dotoi.view.TranslationManager;
+import pl.magzik.dotoi.manager.TranslationManager;
 
 import java.io.IOException;
 import java.net.URL;
