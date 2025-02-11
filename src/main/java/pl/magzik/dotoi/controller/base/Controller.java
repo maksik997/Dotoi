@@ -9,10 +9,10 @@ import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.magzik.dotoi.view.TranslationManager;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -73,45 +73,6 @@ public class Controller {
     }
 
     /**
-     * Translates the provided string key into the corresponding value from the {@link ResourceBundle}.
-     * <p>
-     * If the key is not found in the bundle, it returns the key itself surrounded by double square brackets.
-     * <p>
-     * If there is no bundle attached to this {@link Controller} instance, exception will be thrown.
-     *
-     * @param key the key to translate
-     * @return the translated string, or the key if not found
-     */
-    public @NotNull String translate(@NotNull String key) {
-        validateBundle();
-        if (bundle.containsKey(key)) return bundle.getString(key);
-        log.warn("Missing translation for key: {}", key);
-        return String.format("[[%s]]", key);
-    }
-
-    /**
-     * Finds the key corresponding to the provided value in the {@link ResourceBundle}.
-     * <p>
-     * If no key is found for the value, it returns the value itself.
-     * <p>
-     * If there is no bundle attached to this {@link Controller} instance, exception will be thrown.
-     *
-     * @param value the value to find the corresponding key for
-     * @return the key for the value, or the value itself if not found
-     */
-    public @NotNull String findKey(@NotNull String value) {
-        validateBundle();
-        Optional<String> result = bundle.keySet()
-                                        .stream()
-                                        .map(bundle::getString)
-                                        .filter(v -> v.equals(value))
-                                        .findAny();
-        if (result.isPresent()) return result.get();
-        log.warn("Missing key for a value: {}", value);
-        return String.format("[[%s]]", value);
-    }
-
-    /**
      * Returns new scene loaded from resources based on given fxml path.
      * @param fxmlPath A {@link String}, path to new fxml document.
      * @return A new {@link Scene}.
@@ -141,9 +102,9 @@ public class Controller {
      */
     public void showErrorDialog(String contextText) { ///< TODO: Move to another class?
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(translate("general.alert.error.title"));
-        alert.setHeaderText(translate("general.alert.error.header"));
-        alert.setContentText(translate(contextText));
+        alert.setTitle(TranslationManager.getInstance().translate("general.alert.error.title"));
+        alert.setHeaderText(TranslationManager.getInstance().translate("general.alert.error.header"));
+        alert.setContentText(TranslationManager.getInstance().translate(contextText));
 
         if (stage != null && stage.getScene() != null) {
             alert.initOwner(stage);
