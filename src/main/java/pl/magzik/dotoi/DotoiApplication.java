@@ -52,6 +52,8 @@ public class DotoiApplication extends Application {
         ));
 
         // TODO: Maybe temporary.
+        tray.getMenu().add(new MenuItem("===="));
+
         tray.getMenu().add(new MenuItem(
             TranslationManager.getInstance().translate("tray.task"),
             evt -> WindowManager.getInstance().openWindow("tray.task", new TaskWindow())

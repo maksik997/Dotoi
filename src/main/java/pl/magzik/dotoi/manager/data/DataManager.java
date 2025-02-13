@@ -1,3 +1,6 @@
+/* TODO:
+    - Add JavaDoc for: DataManager, IDataSubscriber, DataEvent - method-wise.
+*/
 package pl.magzik.dotoi.manager.data;
 
 import org.slf4j.Logger;
