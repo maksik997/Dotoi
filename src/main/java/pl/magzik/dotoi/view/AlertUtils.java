@@ -23,6 +23,8 @@ import org.slf4j.LoggerFactory;
  * */
 public class AlertUtils {
 
+    public static void ERROR(Alert.AlertType ERROR, "There is a Error", AlertUtils)
+
     /* TODO: To the person implementing this class:
         - Remember to add yourself as a co-author of this class.
         - If you are unsure or don't know how to do something, ask.
