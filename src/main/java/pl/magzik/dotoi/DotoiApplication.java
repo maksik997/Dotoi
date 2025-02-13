@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import pl.magzik.dotoi.manager.TranslationManager;
 import pl.magzik.dotoi.manager.WindowManager;
 import pl.magzik.dotoi.view.TaskListWindow;
+import pl.magzik.dotoi.view.TaskWindow;
 
 import java.util.Locale;
 
@@ -48,6 +49,12 @@ public class DotoiApplication extends Application {
         tray.getMenu().add(new MenuItem(
             TranslationManager.getInstance().translate("tray.exit"),
             evt -> WindowManager.getInstance().closeAllWindows()
+        ));
+
+        // TODO: Maybe temporary.
+        tray.getMenu().add(new MenuItem(
+            TranslationManager.getInstance().translate("tray.task"),
+            evt -> WindowManager.getInstance().openWindow("tray.task", new TaskWindow())
         ));
     }
 }
