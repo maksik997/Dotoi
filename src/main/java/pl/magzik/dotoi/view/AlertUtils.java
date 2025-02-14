@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 /**
  * Utility class that provides an easy way to handle alerts.
  * This class supports displaying different types of alerts:
@@ -23,8 +24,57 @@ import org.slf4j.LoggerFactory;
  * */
 public class AlertUtils {
 
-    public static void ERROR(Alert.AlertType ERROR, "There is a Error", AlertUtils)
+    public static void ERROR(String infoMessage, String titleBar) {
+        ERROR(infoMessage, titleBar, null);
+    }
 
+    public static void ERROR(String infoMessage, String titleBar, String headerMessage)
+    {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(titleBar);
+        alert.setHeaderText(headerMessage);
+        alert.setContentText(infoMessage);
+        alert.showAndWait();
+    }
+
+    public static void CONFIRMATION(String infoMessage, String titleBar) {
+        CONFIRMATION(infoMessage, titleBar, null);
+    }
+
+    public static void CONFIRMATION(String infoMessage, String titleBar, String headerMessage)
+    {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(titleBar);
+        alert.setHeaderText(headerMessage);
+        alert.setContentText(infoMessage);
+        alert.showAndWait();
+    }
+
+    public static String INFORMATION(String infoMessage, String titleBar) {
+        INFORMATION(infoMessage, titleBar, null);
+    }
+
+    public static void INFORMATION(String infoMessage, String titleBar, String headerMessage)
+    {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titleBar);
+        alert.setHeaderText(headerMessage);
+        alert.setContentText(infoMessage);
+        alert.showAndWait();
+    }
+
+    public static String WARNING(String infoMessage, String titleBar) {
+        WARNING(infoMessage, titleBar, null);
+    }
+
+    public static void WARNING(String infoMessage, String titleBar, String headerMessage)
+    {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(titleBar);
+        alert.setHeaderText(headerMessage);
+        alert.setContentText(infoMessage);
+        alert.showAndWait();
+    }
     /* TODO: To the person implementing this class:
         - Remember to add yourself as a co-author of this class.
         - If you are unsure or don't know how to do something, ask.
