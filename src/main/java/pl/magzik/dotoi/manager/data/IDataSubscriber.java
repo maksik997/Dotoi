@@ -1,5 +1,7 @@
 package pl.magzik.dotoi.manager.data;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * A functional interface representing a subscriber used in {@link DataManager}.
  * <p>
@@ -15,5 +17,5 @@ package pl.magzik.dotoi.manager.data;
  */
 @FunctionalInterface
 public interface IDataSubscriber {
-    void onDataUpdate(DataEvent event);
+    void onDataUpdate(@NotNull DataEvent event);
 }

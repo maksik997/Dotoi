@@ -1,6 +1,7 @@
 package pl.magzik.dotoi;
 
 import dorkbox.systemTray.MenuItem;
+import dorkbox.systemTray.Separator;
 import dorkbox.systemTray.SystemTray;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -9,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.magzik.dotoi.manager.TranslationManager;
 import pl.magzik.dotoi.manager.WindowManager;
+import pl.magzik.dotoi.repository.TaskRepository;
+import pl.magzik.dotoi.service.TaskService;
 import pl.magzik.dotoi.view.TaskListWindow;
 import pl.magzik.dotoi.view.TaskWindow;
 
@@ -32,6 +35,11 @@ public class DotoiApplication extends Application {
 
     public static void main(String[] args) {
         log.info("Initializing the application...");
+
+        log.info("Creating the task model...");
+        new TaskService(new TaskRepository());
+
+        log.info("Initializing GUI...");
         Platform.setImplicitExit(false);
         launch();
     }
@@ -52,7 +60,7 @@ public class DotoiApplication extends Application {
         ));
 
         // TODO: Maybe temporary.
-        tray.getMenu().add(new MenuItem("===="));
+        tray.getMenu().add(new Separator());
 
         tray.getMenu().add(new MenuItem(
             TranslationManager.getInstance().translate("tray.task"),

@@ -1,5 +1,9 @@
 package pl.magzik.dotoi.manager.data;
 
+import pl.magzik.dotoi.model.Task;
+
+import java.util.List;
+
 /**
  * A sealed interface representing different types of events that can occur.
  * <p>
@@ -17,13 +21,21 @@ package pl.magzik.dotoi.manager.data;
  * @author Maksymilian Strzelczak
  * @version 1.0
  */
-public sealed interface DataEvent permits DataEvent.TaskAdded, DataEvent.TaskDeleted, DataEvent.TaskUpdate, DataEvent.TaskDeadline, DataEvent.TaskCompleted  {
+public sealed interface DataEvent permits DataEvent.TaskAdded, DataEvent.TaskDeleted, DataEvent.TaskUpdate,
+        DataEvent.TaskOverdue, DataEvent.TaskCompleted, DataEvent.TaskUncompleted, DataEvent.RequestTasks,
+        DataEvent.TasksFetched, DataEvent.CheckRecurrence, DataEvent.CheckDeadlines {
     // Basic tasks: (TODO: Could be changed)
     // Addition, Deletion, Update, Deadline, Completion
 
-    record TaskAdded() implements DataEvent {}
-    record TaskDeleted() implements DataEvent {}
-    record TaskUpdate() implements DataEvent {}
-    record TaskDeadline() implements DataEvent {}
-    record TaskCompleted() implements DataEvent {}
+    record TaskAdded(Task task) implements DataEvent {}
+    record TaskDeleted(Task task) implements DataEvent {}
+    record TaskUpdate(Task task) implements DataEvent {}
+    record TaskOverdue(Task task) implements DataEvent {}
+    record TaskCompleted(Task task) implements DataEvent {}
+    record TaskUncompleted(Task task) implements DataEvent {}
+    record RequestTasks() implements DataEvent {}
+    record TasksFetched(List<Task> tasks) implements DataEvent {}
+    record CheckRecurrence() implements DataEvent {}
+    record CheckDeadlines() implements DataEvent {}
+
 }

@@ -8,6 +8,8 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.magzik.dotoi.manager.TranslationManager;
+import pl.magzik.dotoi.manager.data.DataManager;
+import pl.magzik.dotoi.manager.data.IDataSubscriber;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -31,6 +33,8 @@ public class Window extends Application {
 
     private final String fxml;
 
+    private IDataSubscriber controller;
+
     public Window(@NotNull String fxml) {
         this.fxml = fxml;
     }
@@ -45,6 +49,9 @@ public class Window extends Application {
         }
         FXMLLoader loader = new FXMLLoader(fxmlURL, TranslationManager.getInstance().getBundle());
         Scene scene = new Scene(loader.load());
+        if (loader.getController() instanceof IDataSubscriber subscriber) {
+            controller = subscriber;
+        }
         stage.setScene(scene);
         stage.show();
         log.info("Window initialized.");
@@ -53,5 +60,6 @@ public class Window extends Application {
     @Override
     public void stop() {
         log.info("Closing the window.");
+        if (controller != null) DataManager.getInstance().unsubscribe(controller);
     }
 }

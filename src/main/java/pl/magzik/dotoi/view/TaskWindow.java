@@ -1,6 +1,6 @@
 package pl.magzik.dotoi.view;
 
-import pl.magzik.dotoi.model.TaskModel;
+import pl.magzik.dotoi.repository.TaskRepository;
 
 public class TaskWindow extends Window {
 
@@ -8,7 +8,5 @@ public class TaskWindow extends Window {
 
     public TaskWindow() {
         super(FXML);
-
-        new TaskModel(); // TODO: TEMP
     }
 }
