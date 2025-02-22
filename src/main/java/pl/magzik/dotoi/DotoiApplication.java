@@ -55,29 +55,41 @@ public class DotoiApplication extends Application {
         TranslationManager.getInstance().setLocale(Locale.getDefault()); ///< TODO: Will be switched with .forLanguageTag(...) or equivalent for model with those settings.
 
         log.info("Creating system tray...");
-        SystemTray tray = SystemTray.get();
-        URL iconUrl = getClass().getResource("/images/dotoi-icon.png");
-        if (iconUrl != null) tray.setImage(iconUrl);
-        else log.error("Couldn't load tray icon.");
+        setupSystemTray();
 
-        tray.getMenu().add(new MenuItem(
-            TranslationManager.getInstance().translate("tray.task-list"),
-            evt -> WindowManager.getInstance().openWindow("general.title", new TaskListWindow())
-        ));
-        tray.getMenu().add(new MenuItem(
-            TranslationManager.getInstance().translate("tray.exit"),
-            evt -> {
-                WindowManager.getInstance().closeAllWindows();
-                taskSchedulerService.shutdown();
-            }
-        ));
+    }
 
-        // TODO: Maybe temporary.
-        tray.getMenu().add(new Separator());
+    private void setupSystemTray() {
+        /*
+        * Main reason of separated thread usage is: macOS
+        * */
+        new Thread(() -> {
+            SystemTray tray = SystemTray.get();
+            URL iconUrl = getClass().getResource("/images/dotoi-icon.png");
+            if (iconUrl != null) tray.setImage(iconUrl);
+            else log.error("Couldn't load tray icon.");
 
-        tray.getMenu().add(new MenuItem(
-            TranslationManager.getInstance().translate("tray.task"),
-            evt -> WindowManager.getInstance().openWindow("tray.task", new TaskWindow())
-        ));
+            tray.getMenu().add(new MenuItem(
+                    TranslationManager.getInstance().translate("tray.task-list"),
+                    evt -> WindowManager.getInstance().openWindow("general.title", new TaskListWindow())
+            ));
+            tray.getMenu().add(new MenuItem(
+                    TranslationManager.getInstance().translate("tray.exit"),
+                    evt -> {
+                        WindowManager.getInstance().closeAllWindows();
+                        taskSchedulerService.shutdown();
+                        System.exit(0);
+                    }
+            ));
+
+            // TODO: Maybe temporary.
+            tray.getMenu().add(new Separator());
+
+            tray.getMenu().add(new MenuItem(
+                    TranslationManager.getInstance().translate("tray.task"),
+                    evt -> WindowManager.getInstance().openWindow("tray.task", new TaskWindow())
+            ));
+            log.debug("System tray has been successfully initialized.");
+        }).start();
     }
 }
