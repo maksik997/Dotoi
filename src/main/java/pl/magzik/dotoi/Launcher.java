@@ -14,6 +14,10 @@ import pl.magzik.dotoi.base.PathResolver;
  * @version 1.0
  */
 public class Launcher {
+    /* TODO:
+        Add macos specific system properties (like: hiding app in dock, etc).
+    */
+
     public static void main(String[] args) {
         setSystemProperties();
         DotoiApplication.main(args);

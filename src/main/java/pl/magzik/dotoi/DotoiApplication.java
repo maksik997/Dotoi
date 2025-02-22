@@ -56,7 +56,6 @@ public class DotoiApplication extends Application {
 
         log.info("Creating system tray...");
         setupSystemTray();
-
     }
 
     private void setupSystemTray() {
@@ -78,6 +77,7 @@ public class DotoiApplication extends Application {
                     evt -> {
                         WindowManager.getInstance().closeAllWindows();
                         taskSchedulerService.shutdown();
+                        tray.shutdown();
                         System.exit(0);
                     }
             ));

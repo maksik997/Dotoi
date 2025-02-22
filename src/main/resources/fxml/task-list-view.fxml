@@ -8,6 +8,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             prefWidth="320"
             prefHeight="480"
@@ -33,20 +35,55 @@
     </top>
 
     <center>
-        <TableView>
+        <TableView fx:id="taskTable" editable="true">
             <placeholder>
                 <Label text="%task.table.empty">
                     <graphic>
                         <FontIcon iconLiteral="fas-calendar-times"/>
                     </graphic>
+                </Label>
+            </placeholder>
 
-                    <!-- Three columns:
+            <!-- Three columns:
                             - Completed mark,
                             - Task name,
                             - Buttons as needed (e.g., Edit, Remove)
                      -->
-                </Label>
-            </placeholder>
+
+            <columns>
+                <TableColumn fx:id="completeColumn"
+                             prefWidth="40"
+                             resizable="false"
+                             reorderable="false"
+                             sortable="false"
+                >
+                    <cellValueFactory>
+                        <PropertyValueFactory property="completed"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="taskColumn"
+                             prefWidth="200"
+                             resizable="false"
+                             reorderable="false"
+                             sortable="false"
+                >
+                    <cellValueFactory>
+                        <PropertyValueFactory property="title"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="editButtonColumn"
+                             prefWidth="40"
+                             resizable="false"
+                             reorderable="false"
+                             sortable="false"
+                />
+                <TableColumn fx:id="deleteButtonColumn"
+                             prefWidth="40"
+                             resizable="false"
+                             reorderable="false"
+                             sortable="false"
+                />
+            </columns>
         </TableView>
     </center>
 
