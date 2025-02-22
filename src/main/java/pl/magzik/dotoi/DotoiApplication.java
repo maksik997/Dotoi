@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import pl.magzik.dotoi.manager.TranslationManager;
 import pl.magzik.dotoi.manager.WindowManager;
 import pl.magzik.dotoi.repository.TaskRepository;
+import pl.magzik.dotoi.service.TaskSchedulerService;
 import pl.magzik.dotoi.service.TaskService;
 import pl.magzik.dotoi.view.TaskListWindow;
 import pl.magzik.dotoi.view.TaskWindow;
@@ -38,6 +39,7 @@ public class DotoiApplication extends Application {
 
         log.info("Creating the task model...");
         new TaskService(new TaskRepository());
+        new TaskSchedulerService();
 
         log.info("Initializing GUI...");
         Platform.setImplicitExit(false);
