@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import pl.magzik.dotoi.manager.data.DataEvent;
 import pl.magzik.dotoi.manager.data.DataManager;
 
+import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -50,5 +51,36 @@ public class TaskSchedulerService {
             DataManager.getInstance().notifySubscribers(new DataEvent.CheckDeadlines());
             DataManager.getInstance().notifySubscribers(new DataEvent.CheckRecurrence());
         }, 0, 1, TimeUnit.MINUTES);
+    }
+
+    /**
+     * Shuts down the scheduler service in a controlled manner.
+     * <p>
+     * The shutdown process follows these steps:
+     * <ol>
+     *     <li>Attempts a graceful shutdown.</li>
+     *     <li>Waits up to 10 seconds for all scheduled tasks to complete.</li>
+     *     <li>If tasks do not complete within the timeout, forces a shutdown.</li>
+     * </ol>
+     * <p>
+     * If the shutdown is forced, any remaining unfinished tasks are logged.
+     * If the thread is interrupted during shutdown, the interrupt flag is restored.
+     * </p>
+     *
+     * <p><b>Note:</b> This method ensures that the thread's interrupt status is properly maintained if an {@link InterruptedException} occurs.</p>
+     */
+    public void shutdown() {
+        scheduler.shutdown();
+        try {
+            if (!scheduler.awaitTermination(10, TimeUnit.SECONDS)) {
+                var pendingTasks = scheduler.shutdownNow();
+                log.warn("{} was forced to shut down. {} tasks remain unfinished.", getClass().getSimpleName(), pendingTasks.size());
+            } else {
+                log.info("{} shut down gracefully.", getClass().getSimpleName());
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); ///< Fix interrupt flag.
+            log.error("{} has been interrupted during shutting down.", getClass().getSimpleName());
+        }
     }
 }

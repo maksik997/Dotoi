@@ -16,6 +16,7 @@ import pl.magzik.dotoi.service.TaskService;
 import pl.magzik.dotoi.view.TaskListWindow;
 import pl.magzik.dotoi.view.TaskWindow;
 
+import java.net.URL;
 import java.util.Locale;
 
 /**
@@ -34,16 +35,19 @@ public class DotoiApplication extends Application {
 
     private static final Logger log = LoggerFactory.getLogger(DotoiApplication.class);
 
+    private final TaskService taskService;
+    private final TaskSchedulerService taskSchedulerService;
+
     public static void main(String[] args) {
         log.info("Initializing the application...");
-
-        log.info("Creating the task model...");
-        new TaskService(new TaskRepository());
-        new TaskSchedulerService();
-
-        log.info("Initializing GUI...");
         Platform.setImplicitExit(false);
         launch();
+    }
+
+    public DotoiApplication() {
+        log.info("Creating the task model...");
+        this.taskService = new TaskService(new TaskRepository());
+        this.taskSchedulerService = new TaskSchedulerService();
     }
 
     @Override
@@ -52,13 +56,20 @@ public class DotoiApplication extends Application {
 
         log.info("Creating system tray...");
         SystemTray tray = SystemTray.get();
+        URL iconUrl = getClass().getResource("/images/dotoi-icon.png");
+        if (iconUrl != null) tray.setImage(iconUrl);
+        else log.error("Couldn't load tray icon.");
+
         tray.getMenu().add(new MenuItem(
             TranslationManager.getInstance().translate("tray.task-list"),
             evt -> WindowManager.getInstance().openWindow("general.title", new TaskListWindow())
         ));
         tray.getMenu().add(new MenuItem(
             TranslationManager.getInstance().translate("tray.exit"),
-            evt -> WindowManager.getInstance().closeAllWindows()
+            evt -> {
+                WindowManager.getInstance().closeAllWindows();
+                taskSchedulerService.shutdown();
+            }
         ));
 
         // TODO: Maybe temporary.
