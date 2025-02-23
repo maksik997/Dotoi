@@ -46,10 +46,10 @@ public class TaskListController implements IDataSubscriber {
         completeColumn.setCellFactory(CheckBoxTableCell.forTableColumn(completeColumn));
 
         taskColumn.setCellFactory(param -> new TaskTableCell());
-        editButtonColumn.setCellFactory(param -> new ButtonTableCell("TEDIT", (e, t) -> {
+        editButtonColumn.setCellFactory(param -> new ButtonTableCell("fas-edit", (e, t) -> {
             log.debug("Open a new window with this task {}.", t);
         }));
-        deleteButtonColumn.setCellFactory(param -> new ButtonTableCell("TDELET", (e, t) -> {
+        deleteButtonColumn.setCellFactory(param -> new ButtonTableCell("fas-minus", (e, t) -> {
             log.debug("Emit an event to delete this task {}.", t);
 
         }));

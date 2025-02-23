@@ -1,13 +1,10 @@
-/* TODO:
-    Add an icon handling.
-*/
-
 package pl.magzik.dotoi.view.table;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import org.jetbrains.annotations.NotNull;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.magzik.dotoi.manager.TranslationManager;
@@ -24,15 +21,12 @@ import java.util.function.BiConsumer;
  * </p>
  *
  * <h3>Usage</h3>
- * <pre>
+ * <pre>{@code
  * TableColumn<Task, String> column = new TableColumn<>("Action");
  * column.setCellFactory(col -> new ButtonTableCell("delete.icon", (event, task) -> {
  *     System.out.println("Deleting task: " + task.getTitle());
  * }));
- * </pre>
- *
- * <p><b>Note:</b> The button label is currently set using the {@link TranslationManager} but may be
- * updated in the future to use an icon literal.</p>
+ * }</pre>
  *
  * @see Task
  *
@@ -54,8 +48,6 @@ public class ButtonTableCell extends TableCell<Task, String> {
      * The provided {@code action} is executed whenever the button is clicked, receiving both the {@link ActionEvent}
      * and the associated {@link Task} from the table row.
      * </p>
-     * <p><b>Note:</b> The button label currently relies on {@link TranslationManager}, but this may be changed
-     * to directly use an icon literal in the future.</p>
      *
      * @param iconLiteral A string representing the button label, which is translated using {@link TranslationManager}.
      * @param action A {@link BiConsumer} that defines the action performed when the button is clicked.
@@ -63,7 +55,8 @@ public class ButtonTableCell extends TableCell<Task, String> {
      */
     public ButtonTableCell(@NotNull String iconLiteral, @NotNull BiConsumer<ActionEvent, Task> action) {
         super();
-        button = new Button(TranslationManager.getInstance().translate(iconLiteral)); ///< TODO: Will be changed for icon literal.
+        button = new Button("", new FontIcon(iconLiteral));
+
         this.action = action;
     }
 
