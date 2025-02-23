@@ -4,9 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
-import javafx.scene.control.cell.ComboBoxTableCell;
-import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +11,8 @@ import pl.magzik.dotoi.manager.data.DataEvent;
 import pl.magzik.dotoi.manager.data.DataManager;
 import pl.magzik.dotoi.manager.data.IDataSubscriber;
 import pl.magzik.dotoi.model.Task;
+import pl.magzik.dotoi.view.table.ButtonTableCell;
+import pl.magzik.dotoi.view.table.TaskTableCell;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -46,64 +45,14 @@ public class TaskListController implements IDataSubscriber {
     private void initialize() {
         completeColumn.setCellFactory(CheckBoxTableCell.forTableColumn(completeColumn));
 
-        taskColumn.setCellFactory(param -> new TableCell<>() {
-            /*
-                TODO: Move it to separate class
-            */
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) setGraphic(null);
-                else {
-                    Task task = getTableRow().getItem();
-                    if (task == null) return;
-                    VBox box = new VBox();
+        taskColumn.setCellFactory(param -> new TaskTableCell());
+        editButtonColumn.setCellFactory(param -> new ButtonTableCell("TEDIT", (e, t) -> {
+            log.debug("Open a new window with this task {}.", t);
+        }));
+        deleteButtonColumn.setCellFactory(param -> new ButtonTableCell("TDELET", (e, t) -> {
+            log.debug("Emit an event to delete this task {}.", t);
 
-                    Label date = new Label(task.getCreatedAt().toLocalDate().toString());
-                    date.setStyle("-fx-font-size: 10px;");
-                    Label title = new Label(task.getTitle());
-                    title.setStyle("-fx-font-weight: bold");
-                    Label description = new Label(task.getDescription());
-                    description.setStyle("-fx-font-size: 10px;");
-
-                    box.getChildren().addAll(date, title, description);
-                    setGraphic(box);
-                }
-            }
-        });
-
-        /* TODO: THESE TO BELOW WILL SURELY GO AS ONE CLASS, RIGHT NOW THERE IS A LOT OF REDUNDANT CODE - ON PURPOSE */
-        editButtonColumn.setCellFactory(param -> new TableCell<>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) setGraphic(null);
-                else {
-                    Task task = getTableRow().getItem();
-                    Button button = new Button("TEDIT");
-                    button.setOnAction(event -> {
-                        log.debug("Open a new window with this task");
-                    });
-                    setGraphic(button);
-                }
-            }
-        });
-
-        deleteButtonColumn.setCellFactory(param -> new TableCell<>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) setGraphic(null);
-                else {
-                    Task task = getTableRow().getItem();
-                    Button button = new Button("TDELET");
-                    button.setOnAction(event -> {
-                        log.debug("Emit an event to delete this task.");
-                    });
-                    setGraphic(button);
-                }
-            }
-        });
+        }));
 
         // TODO: TEMPORARY
         taskTable.setItems(FXCollections.observableArrayList(new Task.Builder("Test", "This is test taskThis is test taskThis is test taskThis is test taskThis is test task", "This is content of test task", List.of(), LocalDateTime.now()).build()));
