@@ -25,6 +25,11 @@
             <artifactId>javafx-fxml</artifactId>
             <version>21</version>
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>21</version>
+        </dependency>
         <dependency> <!-- TODO: COULD BE SWITCHED -->
             <groupId>com.dorkbox</groupId>
             <artifactId>SystemTray</artifactId>

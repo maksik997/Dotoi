@@ -33,7 +33,7 @@ public class Window extends Application {
 
     private final String fxml;
 
-    private IDataSubscriber controller;
+    protected IDataSubscriber controller;
 
     public Window(@NotNull String fxml) {
         this.fxml = fxml;

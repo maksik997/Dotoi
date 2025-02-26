@@ -61,6 +61,7 @@ public class DotoiApplication extends Application {
     private void setupSystemTray() {
         /*
         * Main reason of separated thread usage is: macOS
+        * TODO: Maybe moved to separated class.
         * */
         new Thread(() -> {
             SystemTray tray = SystemTray.get();
@@ -69,17 +70,21 @@ public class DotoiApplication extends Application {
             else log.error("Couldn't load tray icon.");
 
             tray.getMenu().add(new MenuItem(
-                    TranslationManager.getInstance().translate("tray.task-list"),
-                    evt -> WindowManager.getInstance().openWindow("general.title", new TaskListWindow())
+                TranslationManager.getInstance().translate("tray.task-list"),
+                evt -> WindowManager.getInstance().openWindow("general.title", new TaskListWindow())
             ));
             tray.getMenu().add(new MenuItem(
-                    TranslationManager.getInstance().translate("tray.exit"),
-                    evt -> {
-                        WindowManager.getInstance().closeAllWindows();
-                        taskSchedulerService.shutdown();
-                        tray.shutdown();
-                        System.exit(0);
-                    }
+                TranslationManager.getInstance().translate("tray.exit"),
+                evt -> {
+                    WindowManager.getInstance().closeAllWindows();
+                    taskSchedulerService.shutdown();
+                    tray.shutdown();
+                    System.exit(0);
+                }
+            ));
+            tray.getMenu().add(new MenuItem(
+                TranslationManager.getInstance().translate("tray.settings"),
+                evt -> log.debug("Open settings window.")
             ));
 
             // TODO: Maybe temporary.

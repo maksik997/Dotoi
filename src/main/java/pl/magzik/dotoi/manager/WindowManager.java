@@ -72,6 +72,6 @@ public class WindowManager {
             windows.forEach(Stage::close);
             windows.clear();
         });
-        Platform.exit();
+        Platform.exit(); ///< TODO: Determine whether this should be executed here.
     }
 }

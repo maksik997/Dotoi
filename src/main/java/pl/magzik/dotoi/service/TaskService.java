@@ -73,6 +73,7 @@ public class TaskService implements IDataSubscriber {
                 log.info("Removing a task from the repository.");
                 taskRepository.delete(taskDeleted.task());
             }
+            /* TODO: ADD HANDLING OF TASK_COMPLETED/TASK_UNCOMPLETED EVENTS */
             case DataEvent.TaskUpdate taskUpdate -> {
                 /*
                 * Please note: Task is compared to another task by its id.

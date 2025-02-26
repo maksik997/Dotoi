@@ -15,6 +15,9 @@
             prefHeight="480"
             fx:controller="pl.magzik.dotoi.controller.TaskListController">
 
+    <!-- TODO: REMOVE FOCUS TRAVERSAL -->
+    <!-- TODO: FILTERING OPTIONS -->
+
     <top>
         <VBox>
             <Label text="%task.header.label"
@@ -22,7 +25,9 @@
 
 
             <ToolBar>
-                <Button>
+                <Button onAction="#handleNewTaskButton"
+
+                >
                     <graphic>
                         <FontIcon iconLiteral="fas-plus"/>
                     </graphic>
