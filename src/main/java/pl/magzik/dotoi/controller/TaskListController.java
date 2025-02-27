@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.magzik.dotoi.controller.base.Controller;
 import pl.magzik.dotoi.manager.WindowManager;
 import pl.magzik.dotoi.manager.data.DataEvent;
 import pl.magzik.dotoi.manager.data.DataManager;
@@ -20,7 +21,7 @@ import pl.magzik.dotoi.view.table.TaskTableCell;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class TaskListController implements IDataSubscriber {
+public class TaskListController extends Controller {
 
     private static final Logger log = LoggerFactory.getLogger(TaskListController.class);
 

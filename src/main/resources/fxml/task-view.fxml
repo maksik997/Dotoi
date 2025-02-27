@@ -21,20 +21,36 @@
 
     <top>
         <HBox>
-            <TextField promptText="%task-editor.title.label"/>
+            <VBox HBox.hgrow="ALWAYS">
+                <TextField promptText="%task-editor.title.label"
+                           fx:id="titleTextField"
+                           focusTraversable="false"
+                />
+                <TextField promptText="%task-editor.description.label"
+                           fx:id="descriptionTextField"
+                           focusTraversable="false"
+                />
+            </VBox>
 
             <Region HBox.hgrow="ALWAYS"/>
 
             <VBox>
                 <HBox>
-                    <CheckBox text="%task-editor.deadline.label"/>
+                    <CheckBox text="%task-editor.deadline.label"
+                              fx:id="deadlineCheckbox"
+                              focusTraversable="false"
+                    />
 
                     <Region HBox.hgrow="ALWAYS"/>
 
                     <TextField text="dd-mm-yyyy HH:mm:ss"
+                               fx:id="deadlineTextField"
+                               focusTraversable="false"
                                editable="false"
                     />
-                    <Button>
+                    <Button focusTraversable="false"
+                            onAction="#handleDateSelection"
+                    >
                         <graphic>
                             <FontIcon iconLiteral="fas-calendar-alt"/>
                         </graphic>
@@ -42,14 +58,21 @@
                 </HBox>
 
                 <HBox>
-                    <CheckBox text="%task-editor.recurrence-rule.label"/>
+                    <CheckBox text="%task-editor.recurrence-rule.label"
+                              fx:id="recurrenceRuleCheckbox"
+                              focusTraversable="false"
+                    />
 
                     <Region HBox.hgrow="ALWAYS"/>
 
                     <TextField text="DAILY - 2"
+                               fx:id="recurrenceRuleTextField"
+                               focusTraversable="false"
                                editable="false"
                     />
-                    <Button>
+                    <Button focusTraversable="false"
+                            onAction="#handleRecurrenceRuleSelection"
+                    >
                         <graphic>
                             <FontIcon iconLiteral="fas-hourglass-half"/>
                         </graphic>
@@ -59,7 +82,9 @@
                 </HBox>
             </VBox>
 
-            <Button>
+            <Button focusTraversable="false"
+                    onAction="#handleSave"
+            >
                 <graphic>
                     <FontIcon iconLiteral="fas-save"/>
                 </graphic>
@@ -73,30 +98,55 @@
                 - Preview tab contain parsed markdown text.
                 - Edit tab contain plain text.
          -->
-        <TabPane>
+        <TabPane focusTraversable="false">
             <Tab text="%task-editor.edit.label"
                  closable="false"
             >
-                <TextArea/>
+                <TextArea focusTraversable="false"
+                          fx:id="contentTextArea"
+                />
             </Tab>
             <Tab text="%task-editor.preview.label"
                  closable="false"
+                 onSelectionChanged="#handlePreview"
             >
-                <WebView/>
+                <WebView focusTraversable="false"
+                         fx:id="contentWebView"
+                />
             </Tab>
         </TabPane>
     </center>
 
     <right>
-        <VBox prefWidth="50">
-            <Button>
-                <graphic>
-                    <FontIcon iconLiteral="fas-plus"/>
-                </graphic>
-            </Button>
+        <VBox maxWidth="150">
+            <HBox>
+                <Button focusTraversable="false"
+                        onAction="#handleAddApplication"
+                >
+                    <graphic>
+                        <FontIcon iconLiteral="fas-plus"/>
+                    </graphic>
+                </Button>
+                <Button focusTraversable="false"
+                        onAction="#handleRemoveApplication"
+                >
+                    <graphic>
+                        <FontIcon iconLiteral="fas-minus"/>
+                    </graphic>
+                </Button>
+            </HBox>
 
-            <ListView VBox.vgrow="ALWAYS">
-
+            <ListView VBox.vgrow="ALWAYS"
+                      fx:id="applicationsListView"
+                      focusTraversable="false"
+            >
+                <placeholder>
+                    <Label text="TNOAPPS">
+                        <graphic>
+                            <FontIcon iconLiteral="fas-flushed"/>
+                        </graphic>
+                    </Label>
+                </placeholder>
             </ListView>
         </VBox>
     </right>
@@ -104,12 +154,16 @@
     <bottom>
         <HBox spacing="5">
             <Label text="%task-editor.id.label"/>
-            <Label text="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"/>
+            <Label text="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                   fx:id="uuidLabel"
+            />
 
             <Region HBox.hgrow="ALWAYS"/>
 
             <Label text="%task-editor.created-at.label"/>
-            <Label text="DD-MM-YYYY HH:mm:ss"/>
+            <Label text="DD-MM-YYYY HH:mm:ss"
+                   fx:id="creationDateLabel"
+            />
         </HBox>
     </bottom>
 

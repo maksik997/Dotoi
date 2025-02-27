@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.magzik.dotoi.controller.base.Controller;
 import pl.magzik.dotoi.manager.TranslationManager;
 import pl.magzik.dotoi.manager.data.DataManager;
 import pl.magzik.dotoi.manager.data.IDataSubscriber;
@@ -49,8 +50,9 @@ public class Window extends Application {
         }
         FXMLLoader loader = new FXMLLoader(fxmlURL, TranslationManager.getInstance().getBundle());
         Scene scene = new Scene(loader.load());
-        if (loader.getController() instanceof IDataSubscriber subscriber) {
-            controller = subscriber;
+        if (loader.getController() instanceof Controller c) {
+            this.controller = c;
+            c.setStage(stage);
         }
         stage.setScene(scene);
         stage.show();
