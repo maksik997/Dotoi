@@ -1,10 +1,13 @@
 package pl.magzik.dotoi.view;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Optional;
 
 
 /**
@@ -24,55 +27,47 @@ import org.slf4j.LoggerFactory;
  * */
 public class AlertUtils {
 
-    public static void ERROR(String infoMessage, String titleBar) {
-        ERROR(infoMessage, titleBar, null);
+    private static final Logger log = LoggerFactory.getLogger(AlertUtils.class);
+    private static Stage stage;
+    private static String contextText;
+
+
+
+    /**
+     * Displays a confirmation alert and returns the user's response.
+     *
+     * @param stage       The owner {@link Stage}.
+     * @param contextText The confirmation message.
+     * @return {@code true} if the user clicks OK, otherwise {@code false}.
+     */
+    public static boolean showConfirmationAlert(@NotNull Stage stage, @NotNull String contextText) {
+        log.info("Displaying confirmation alert: {}", contextText);
+        Alert alert = createAlert(stage, Alert.AlertType.CONFIRMATION, "Confirmation", "Please Confirm", contextText);
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.isPresent() && result.get() == ButtonType.OK;
     }
 
-    public static void ERROR(String infoMessage, String titleBar, String headerMessage)
-    {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(titleBar);
-        alert.setHeaderText(headerMessage);
-        alert.setContentText(infoMessage);
+    /**
+     * Displays an information alert.
+     *
+     * @param stage       The owner {@link Stage}.
+     * @param contextText The informational message.
+     */
+    public static void showInformationAlert(@NotNull Stage stage, @NotNull String contextText) {
+        log.info("Displaying information alert: {}", contextText);
+        Alert alert = createAlert(stage, Alert.AlertType.INFORMATION, "Information", "Notice", contextText);
         alert.showAndWait();
     }
 
-    public static void CONFIRMATION(String infoMessage, String titleBar) {
-        CONFIRMATION(infoMessage, titleBar, null);
-    }
-
-    public static void CONFIRMATION(String infoMessage, String titleBar, String headerMessage)
-    {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(titleBar);
-        alert.setHeaderText(headerMessage);
-        alert.setContentText(infoMessage);
-        alert.showAndWait();
-    }
-
-    public static String INFORMATION(String infoMessage, String titleBar) {
-        INFORMATION(infoMessage, titleBar, null);
-    }
-
-    public static void INFORMATION(String infoMessage, String titleBar, String headerMessage)
-    {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(titleBar);
-        alert.setHeaderText(headerMessage);
-        alert.setContentText(infoMessage);
-        alert.showAndWait();
-    }
-
-    public static String WARNING(String infoMessage, String titleBar) {
-        WARNING(infoMessage, titleBar, null);
-    }
-
-    public static void WARNING(String infoMessage, String titleBar, String headerMessage)
-    {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(titleBar);
-        alert.setHeaderText(headerMessage);
-        alert.setContentText(infoMessage);
+    /**
+     * Displays a warning alert.
+     *
+     * @param stage       The owner {@link Stage}.
+     * @param contextText The warning message.
+     */
+    public static void showWarningAlert(@NotNull Stage stage, @NotNull String contextText) {
+        log.warn("Displaying warning alert: {}", contextText);
+        Alert alert = createAlert(stage, Alert.AlertType.WARNING, "Warning", "Caution", contextText);
         alert.showAndWait();
     }
     /* TODO: To the person implementing this class:
@@ -84,7 +79,7 @@ public class AlertUtils {
     */
 
     ///< TODO: Could be used, or not... Depends on person implementing it... ;)
-    private static final Logger log = LoggerFactory.getLogger(AlertUtils.class);
+    // private static final Logger log = LoggerFactory.getLogger(AlertUtils.class);
 
     /**
      * Creates an {@link Alert} with the specified type, title, header text, and context text.
@@ -105,7 +100,14 @@ public class AlertUtils {
         @NotNull String contextText
     ) {
 
-        return null; // TODO: Temporary
+            Alert alert = new Alert(type);
+            alert.setTitle(title);
+            alert.setHeaderText(headerText);
+            alert.setContentText(contextText);
+            alert.initOwner(owner);
+            return alert;
+
+       //  return null; // TODO: Temporary
     }
 
     /**
@@ -116,8 +118,19 @@ public class AlertUtils {
      * @param contextText The context text of the alert.
      * */
     public static void showErrorMessage(@NotNull Stage stage, @NotNull String contextText) {
-
+        AlertUtils.stage = stage;
+        AlertUtils.contextText = contextText;
+        log.error("Displaying error alert: {}", contextText);
+        Alert alert = createAlert(stage, Alert.AlertType.ERROR, "Error", "Error Occurred", contextText);
+        alert.showAndWait();
     }
+
+    /*
+     * Displays an error alert.
+     *
+     * @param stage       The owner {@link Stage}.
+     * @param contextText The error message.
+     */
 
     // TODO: Some other types of alerts below?
 
