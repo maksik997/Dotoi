@@ -8,25 +8,38 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.magzik.dotoi.controller.base.Controller;
+import pl.magzik.dotoi.manager.TranslationManager;
 import pl.magzik.dotoi.manager.data.DataEvent;
 import pl.magzik.dotoi.model.Task;
 import pl.magzik.dotoi.util.ApplicationUtils;
 import pl.magzik.dotoi.util.MarkdownUtils;
 import pl.magzik.dotoi.view.list.ApplicationListCell;
+import pl.magzik.dotoi.viewmodel.TaskViewModel;
 
 import java.io.File;
-import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class TaskController extends Controller {
 
     private static final Logger log = LoggerFactory.getLogger(TaskController.class);
 
-    private Task task;
+    private TaskViewModel task;
+
+    public TaskController() {
+        this.task = new TaskViewModel(new Task.Builder(
+                TranslationManager.getInstance().translate("task-editor.new-task.placeholder"),
+                "",
+                "",
+                List.of(),
+                LocalDateTime.now()
+        ).build());
+    }
 
     public void setTask(Task task) {
         log.debug("Task {} has been attached to this instance.", task);
-        this.task = task;
+        this.task = new TaskViewModel(task);
+        initializeControls();
     }
 
     @FXML
@@ -66,8 +79,24 @@ public class TaskController extends Controller {
     private void initialize() {
         applicationsListView.setCellFactory(param -> new ApplicationListCell());
 
+        initializeControls();
+
         // TODO: Temporary
-        applicationsListView.setItems(FXCollections.observableList(List.of(new File("/Users/maksik997/Applications/PictureComparerFX.app"))));
+//        applicationsListView.setItems(FXCollections.observableList(List.of(new File("/Users/maksik997/Applications/PictureComparerFX.app"))));
+    }
+
+    private void initializeControls() {
+        titleTextField.textProperty().bindBidirectional(task.titleProperty());
+        descriptionTextField.textProperty().bindBidirectional(task.descriptionProperty());
+        contentTextArea.textProperty().bindBidirectional(task.contentProperty());
+
+        uuidLabel.setText(task.getId());
+        creationDateLabel.setText(task.getCreatedAt().toString());
+
+        /* TODO:
+         *   Add handling for Deadline, RecurrenceRule
+         *   Add hyperlink handling
+         *  */
     }
 
     /**
@@ -116,16 +145,12 @@ public class TaskController extends Controller {
         /* TODO:
         *   Add application entry to a listview.
         * */
-        /* TODO: Temporary v */
         File app = ApplicationUtils.chooseApplication(getStage());
-        log.debug("User choose application: {}", app);
-        if (app == null) return;
-        log.debug("Trying to execute: {}", app);
-        try {
-            ApplicationUtils.openApplication(app);
-        } catch (IOException e) {
-            log.error("Cannot open app.", e);
+        if (app == null) {
+            log.warn("User didn't select application.");
+            return;
         }
+        applicationsListView.getItems().add(app); ///< TODO: Temporary
     }
 
     @FXML

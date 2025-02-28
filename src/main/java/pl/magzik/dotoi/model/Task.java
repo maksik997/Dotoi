@@ -7,6 +7,7 @@ import pl.magzik.dotoi.manager.data.DataManager;
 import pl.magzik.dotoi.repository.ITaskRepository;
 import pl.magzik.dotoi.repository.TaskRepository;
 
+import java.io.File;
 import java.io.Serializable;
 import java.net.URI;
 import java.time.LocalDateTime;
@@ -33,7 +34,7 @@ public class Task implements Serializable {
     private final String title;
     private final String description;
     private final String content;
-    private final List<URI> hyperlinks; ///< Either apps or sites, anything that can be specified with URI
+    private final List<String> hyperlinks; ///< Applications
     private final LocalDateTime createdAt;
     private final LocalDateTime deadline;
     private final RecurrenceRule recurrenceRule;
@@ -57,13 +58,13 @@ public class Task implements Serializable {
         private final String title;
         private final String description;
         private final String content;
-        private final List<URI> hyperlinks;
+        private final List<String> hyperlinks;
         private final LocalDateTime createdAt;
         private LocalDateTime deadline;
         private RecurrenceRule recurrenceRule;
         private boolean completed;
 
-        public Builder(@NotNull String title, @NotNull String description, @NotNull String content, @NotNull List<URI> hyperlinks, @NotNull LocalDateTime createdAt) {
+        public Builder(@NotNull String title, @NotNull String description, @NotNull String content, @NotNull List<String> hyperlinks, @NotNull LocalDateTime createdAt) {
             this.id = UUID.randomUUID();
             if (title.trim().isEmpty()) throw new IllegalArgumentException("Title shouldn't be empty.");
             this.title = title;
@@ -111,7 +112,7 @@ public class Task implements Serializable {
     public @NotNull String getContent() {
         return content;
     }
-    public @NotNull List<URI> getHyperlinks() {
+    public @NotNull List<String> getHyperlinks() {
         return hyperlinks;
     }
     public @NotNull LocalDateTime getCreatedAt() {

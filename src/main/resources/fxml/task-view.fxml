@@ -141,7 +141,7 @@
                       focusTraversable="false"
             >
                 <placeholder>
-                    <Label text="TNOAPPS">
+                    <Label text="%task-editor.applications.list.empty">
                         <graphic>
                             <FontIcon iconLiteral="fas-flushed"/>
                         </graphic>

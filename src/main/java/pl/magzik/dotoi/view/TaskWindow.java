@@ -25,7 +25,7 @@ public class TaskWindow extends Window {
     @Override
     public void start(@NotNull Stage stage) throws IOException {
         super.start(stage);
-        if (super.controller instanceof TaskController taskController) {
+        if (super.controller instanceof TaskController taskController && task != null) {
             taskController.setTask(task);
         }
     }
