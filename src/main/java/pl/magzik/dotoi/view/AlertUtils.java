@@ -28,9 +28,6 @@ import java.util.Optional;
 public class AlertUtils {
 
     private static final Logger log = LoggerFactory.getLogger(AlertUtils.class);
-    private static Stage stage;
-    private static String contextText;
-
 
 
     /**
@@ -70,16 +67,7 @@ public class AlertUtils {
         Alert alert = createAlert(stage, Alert.AlertType.WARNING, "Warning", "Caution", contextText);
         alert.showAndWait();
     }
-    /* TODO: To the person implementing this class:
-        - Remember to add yourself as a co-author of this class.
-        - If you are unsure or don't know how to do something, ask.
-        - Research online, use chat, etc.
-        - Try to keep your code DRY and follow good programming practices.
-        - Consider different return types—some methods may return something other than void.
-    */
 
-    ///< TODO: Could be used, or not... Depends on person implementing it... ;)
-    // private static final Logger log = LoggerFactory.getLogger(AlertUtils.class);
 
     /**
      * Creates an {@link Alert} with the specified type, title, header text, and context text.
@@ -100,38 +88,19 @@ public class AlertUtils {
         @NotNull String contextText
     ) {
 
-            Alert alert = new Alert(type);
-            alert.setTitle(title);
-            alert.setHeaderText(headerText);
-            alert.setContentText(contextText);
-            alert.initOwner(owner);
-            return alert;
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contextText);
+        alert.initOwner(owner);
+        return alert;
 
-       //  return null; // TODO: Temporary
     }
 
-    /**
-     * Creates an error {@link Alert} with the specified context text.
-     * The alert is assigned to the given {@link Stage} object as its owner.
-     *
-     * @param stage The {@link Stage} to be set as the owner of the alert.
-     * @param contextText The context text of the alert.
-     * */
     public static void showErrorMessage(@NotNull Stage stage, @NotNull String contextText) {
-        AlertUtils.stage = stage;
-        AlertUtils.contextText = contextText;
         log.error("Displaying error alert: {}", contextText);
         Alert alert = createAlert(stage, Alert.AlertType.ERROR, "Error", "Error Occurred", contextText);
         alert.showAndWait();
     }
-
-    /*
-     * Displays an error alert.
-     *
-     * @param stage       The owner {@link Stage}.
-     * @param contextText The error message.
-     */
-
-    // TODO: Some other types of alerts below?
 
 }
