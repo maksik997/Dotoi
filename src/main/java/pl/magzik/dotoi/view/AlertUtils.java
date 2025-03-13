@@ -1,10 +1,14 @@
 package pl.magzik.dotoi.view;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Optional;
+
 
 /**
  * Utility class that provides an easy way to handle alerts.
@@ -18,21 +22,63 @@ import org.slf4j.LoggerFactory;
  * All types of alerts block the main thread of the application and wait for user interaction.
  *
  * @since 0.1
- * @author Maksymilian Strzelczak, ...
+ * @author Maksymilian Strzelczak, Jaglak
  * @version 1.0
  * */
 public class AlertUtils {
 
-    /* TODO: To the person implementing this class:
-        - Remember to add yourself as a co-author of this class.
-        - If you are unsure or don't know how to do something, ask.
-        - Research online, use chat, etc.
-        - Try to keep your code DRY and follow good programming practices.
-        - Consider different return types—some methods may return something other than void.
-    */
-
-    ///< TODO: Could be used, or not... Depends on person implementing it... ;)
     private static final Logger log = LoggerFactory.getLogger(AlertUtils.class);
+
+
+    /**
+     * Displays a confirmation alert and returns the user's response.
+     *
+     * @param stage       The owner {@link Stage}.
+     * @param contextText The confirmation message.
+     * @return {@code true} if the user clicks OK, otherwise {@code false}.
+     */
+    public static boolean showConfirmationAlert(@NotNull Stage stage, @NotNull String contextText) {
+        log.info("Displaying confirmation alert: {}", contextText);
+        Alert alert = createAlert(stage, Alert.AlertType.CONFIRMATION, "Confirmation", "Please Confirm", contextText);
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.isPresent() && result.get() == ButtonType.OK;
+    }
+
+    /**
+     * Displays an information alert.
+     *
+     * @param stage       The owner {@link Stage}.
+     * @param contextText The informational message.
+     */
+    public static void showInformationAlert(@NotNull Stage stage, @NotNull String contextText) {
+        log.info("Displaying information alert: {}", contextText);
+        Alert alert = createAlert(stage, Alert.AlertType.INFORMATION, "Information", "Notice", contextText);
+        alert.showAndWait();
+    }
+
+    /**
+     * Displays a warning alert.
+     *
+     * @param stage       The owner {@link Stage}.
+     * @param contextText The warning message.
+     */
+    public static void showWarningAlert(@NotNull Stage stage, @NotNull String contextText) {
+        log.warn("Displaying warning alert: {}", contextText);
+        Alert alert = createAlert(stage, Alert.AlertType.WARNING, "Warning", "Caution", contextText);
+        alert.showAndWait();
+    }
+
+    /**
+     * Displays an error alert
+     *
+     * @param stage The owner {@link Stage}.
+     * @param contextText The error message.
+     */
+    public static void showErrorAlert(@NotNull Stage stage, @NotNull String contextText) {
+        log.error("Displaying error alert: {}", contextText);
+        Alert alert = createAlert(stage, Alert.AlertType.ERROR, "Error", "Error Occurred", contextText);
+        alert.showAndWait();
+    }
 
     /**
      * Creates an {@link Alert} with the specified type, title, header text, and context text.
@@ -53,20 +99,14 @@ public class AlertUtils {
         @NotNull String contextText
     ) {
 
-        return null; // TODO: Temporary
-    }
-
-    /**
-     * Creates an error {@link Alert} with the specified context text.
-     * The alert is assigned to the given {@link Stage} object as its owner.
-     *
-     * @param stage The {@link Stage} to be set as the owner of the alert.
-     * @param contextText The context text of the alert.
-     * */
-    public static void showErrorMessage(@NotNull Stage stage, @NotNull String contextText) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contextText);
+        alert.initOwner(owner);
+        return alert;
 
     }
 
-    // TODO: Some other types of alerts below?
 
 }
