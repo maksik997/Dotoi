@@ -22,7 +22,7 @@ import java.util.Optional;
  * All types of alerts block the main thread of the application and wait for user interaction.
  *
  * @since 0.1
- * @author Maksymilian Strzelczak, ...
+ * @author Maksymilian Strzelczak, Jaglak
  * @version 1.0
  * */
 public class AlertUtils {
@@ -67,7 +67,11 @@ public class AlertUtils {
         Alert alert = createAlert(stage, Alert.AlertType.WARNING, "Warning", "Caution", contextText);
         alert.showAndWait();
     }
-
+    public static void showErrorAlert(@NotNull Stage stage, @NotNull String contextText) {
+        log.error("Displaying error alert: {}", contextText);
+        Alert alert = createAlert(stage, Alert.AlertType.ERROR, "Error", "Error Occurred", contextText);
+        alert.showAndWait();
+    }
 
     /**
      * Creates an {@link Alert} with the specified type, title, header text, and context text.
@@ -97,10 +101,5 @@ public class AlertUtils {
 
     }
 
-    public static void showErrorMessage(@NotNull Stage stage, @NotNull String contextText) {
-        log.error("Displaying error alert: {}", contextText);
-        Alert alert = createAlert(stage, Alert.AlertType.ERROR, "Error", "Error Occurred", contextText);
-        alert.showAndWait();
-    }
 
 }
