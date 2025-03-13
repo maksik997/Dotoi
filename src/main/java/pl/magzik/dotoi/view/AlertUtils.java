@@ -67,6 +67,13 @@ public class AlertUtils {
         Alert alert = createAlert(stage, Alert.AlertType.WARNING, "Warning", "Caution", contextText);
         alert.showAndWait();
     }
+
+    /**
+     * Displays an error alert
+     *
+     * @param stage The owner {@link Stage}.
+     * @param contextText The error message.
+     */
     public static void showErrorAlert(@NotNull Stage stage, @NotNull String contextText) {
         log.error("Displaying error alert: {}", contextText);
         Alert alert = createAlert(stage, Alert.AlertType.ERROR, "Error", "Error Occurred", contextText);
