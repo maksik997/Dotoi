@@ -89,13 +89,16 @@ public class TaskController extends Controller {
         titleTextField.textProperty().bindBidirectional(task.titleProperty());
         descriptionTextField.textProperty().bindBidirectional(task.descriptionProperty());
         contentTextArea.textProperty().bindBidirectional(task.contentProperty());
-
         uuidLabel.setText(task.getId());
         creationDateLabel.setText(task.getCreatedAt().toString());
 
+        task.getHyperlinks().stream()
+                .map(File::new)
+                .forEach(f -> applicationsListView.getItems().add(f));
+
+
         /* TODO:
          *   Add handling for Deadline, RecurrenceRule
-         *   Add hyperlink handling
          *  */
     }
 
@@ -142,22 +145,22 @@ public class TaskController extends Controller {
 
     @FXML
     public void handleAddApplication() {
-        /* TODO:
-        *   Add application entry to a listview.
-        * */
         File app = ApplicationUtils.chooseApplication(getStage());
         if (app == null) {
             log.warn("User didn't select application.");
             return;
         }
-        applicationsListView.getItems().add(app); ///< TODO: Temporary
+        applicationsListView.getItems().add(app);
+        task.getHyperlinks().add(String.valueOf(app));
     }
 
     @FXML
     public void handleRemoveApplication() {
-        /* TODO:
-        *   Remove selected application from list view.
-        * */
+        List<Integer> indices = applicationsListView.getSelectionModel().getSelectedIndices();
+        indices.stream()
+                .mapToInt(Integer::intValue)
+                .peek(i -> task.getHyperlinks().remove(i))
+                .forEach(i -> applicationsListView.getItems().remove(i));
     }
 
     @Override
