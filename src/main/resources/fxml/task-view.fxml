@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.web.WebView?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="pl.magzik.dotoi.controller.TaskController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <top>
+        <HBox>
+            <VBox HBox.hgrow="ALWAYS">
+                <TextField promptText="%task-editor.title.label"
+                           fx:id="titleTextField"
+                           focusTraversable="false"
+                />
+                <TextField promptText="%task-editor.description.label"
+                           fx:id="descriptionTextField"
+                           focusTraversable="false"
+                />
+            </VBox>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <VBox>
+                <HBox>
+                    <CheckBox text="%task-editor.deadline.label"
+                              fx:id="deadlineCheckbox"
+                              focusTraversable="false"
+                    />
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <TextField text="dd-mm-yyyy HH:mm:ss"
+                               fx:id="deadlineTextField"
+                               focusTraversable="false"
+                               editable="false"
+                    />
+                    <Button focusTraversable="false"
+                            onAction="#handleDateSelection"
+                    >
+                        <graphic>
+                            <FontIcon iconLiteral="fas-calendar-alt"/>
+                        </graphic>
+                    </Button>
+                </HBox>
+
+                <HBox>
+                    <CheckBox text="%task-editor.recurrence-rule.label"
+                              fx:id="recurrenceRuleCheckbox"
+                              focusTraversable="false"
+                    />
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <TextField text="DAILY - 2"
+                               fx:id="recurrenceRuleTextField"
+                               focusTraversable="false"
+                               editable="false"
+                    />
+                    <Button focusTraversable="false"
+                            onAction="#handleRecurrenceRuleSelection"
+                    >
+                        <graphic>
+                            <FontIcon iconLiteral="fas-hourglass-half"/>
+                        </graphic>
+                    </Button>
+
+
+                </HBox>
+            </VBox>
+
+            <Button focusTraversable="false"
+                    onAction="#handleSave"
+            >
+                <graphic>
+                    <FontIcon iconLiteral="fas-save"/>
+                </graphic>
+            </Button>
+        </HBox>
+    </top>
+
+    <center>
+        <!-- TODO: flexmark-java -> Markdown into HTML.
+                - Add two tabs (Edit -> TextArea, Preview -> WebView)
+                - Preview tab contain parsed markdown text.
+                - Edit tab contain plain text.
+         -->
+        <TabPane focusTraversable="false">
+            <Tab text="%task-editor.edit.label"
+                 closable="false"
+            >
+                <TextArea focusTraversable="false"
+                          fx:id="contentTextArea"
+                />
+            </Tab>
+            <Tab text="%task-editor.preview.label"
+                 closable="false"
+                 onSelectionChanged="#handlePreview"
+            >
+                <WebView focusTraversable="false"
+                         fx:id="contentWebView"
+                />
+            </Tab>
+        </TabPane>
+    </center>
+
+    <right>
+        <VBox maxWidth="150">
+            <HBox>
+                <Button focusTraversable="false"
+                        onAction="#handleAddApplication"
+                >
+                    <graphic>
+                        <FontIcon iconLiteral="fas-plus"/>
+                    </graphic>
+                </Button>
+                <Button focusTraversable="false"
+                        onAction="#handleRemoveApplication"
+                >
+                    <graphic>
+                        <FontIcon iconLiteral="fas-minus"/>
+                    </graphic>
+                </Button>
+            </HBox>
+
+            <ListView VBox.vgrow="ALWAYS"
+                      fx:id="applicationsListView"
+                      focusTraversable="false"
+            >
+                <placeholder>
+                    <Label text="%task-editor.applications.list.empty">
+                        <graphic>
+                            <FontIcon iconLiteral="fas-flushed"/>
+                        </graphic>
+                    </Label>
+                </placeholder>
+            </ListView>
+        </VBox>
+    </right>
+
+    <bottom>
+        <HBox spacing="5">
+            <Label text="%task-editor.id.label"/>
+            <Label text="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                   fx:id="uuidLabel"
+            />
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label text="%task-editor.created-at.label"/>
+            <Label text="DD-MM-YYYY HH:mm:ss"
+                   fx:id="creationDateLabel"
+            />
+        </HBox>
+    </bottom>
+
+</BorderPane>

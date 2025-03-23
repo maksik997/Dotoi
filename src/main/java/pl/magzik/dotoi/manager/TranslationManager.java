@@ -1,4 +1,4 @@
-package pl.magzik.dotoi.view;
+package pl.magzik.dotoi.manager;
 
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -40,7 +40,7 @@ public class TranslationManager {
         return InstanceHolder.instance;
     }
 
-    private static final String BUNDLE_NAME = "localization";
+    private static final String BUNDLE_NAME = "i18n.localization";
 
     private ResourceBundle bundle;
 
@@ -57,6 +57,13 @@ public class TranslationManager {
     public void setLocale(@NotNull Locale locale) {
         log.info("Changing locale to: {}", locale.getDisplayLanguage());
         bundle = ResourceBundle.getBundle(BUNDLE_NAME, locale);
+    }
+
+    /**
+     * @return The {@link ResourceBundle} associated with this class
+     */
+    public @NotNull ResourceBundle getBundle() {
+        return bundle;
     }
 
     /**

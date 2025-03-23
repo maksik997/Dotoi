@@ -1,70 +1,100 @@
 package pl.magzik.dotoi;
 
+import dorkbox.systemTray.MenuItem;
+import dorkbox.systemTray.Separator;
+import dorkbox.systemTray.SystemTray;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
+import javafx.application.Platform;
 import javafx.stage.Stage;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.magzik.dotoi.controller.base.Controller;
+import pl.magzik.dotoi.manager.TranslationManager;
+import pl.magzik.dotoi.manager.WindowManager;
+import pl.magzik.dotoi.repository.TaskRepository;
+import pl.magzik.dotoi.service.TaskSchedulerService;
+import pl.magzik.dotoi.service.TaskService;
+import pl.magzik.dotoi.view.TaskListWindow;
+import pl.magzik.dotoi.view.TaskWindow;
 
-import java.io.IOException;
+import java.net.URL;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
+/**
+ * The main entry point of the application.
+ * This class handles essential configuration, including initializing the JavaFX Toolkit, setting up the system tray, and more.
+ * <p>
+ * Unlike a typical JavaFX application, this class does not open a window; instead, it relies on the system tray for interaction.
+ * It initializes necessary models, services, and various communication configurations.
+ * Additionally, it disables the implicit application exit, delegating the responsibility of closing the app to the system tray.
+ *
+ * @since 0.1
+ * @author Maksymilian Strzelczak
+ * @version 1.0
+ */
 public class DotoiApplication extends Application {
 
     private static final Logger log = LoggerFactory.getLogger(DotoiApplication.class);
 
-    private static final String APPLICATION_NAME = "general.title";
+    private final TaskService taskService;
+    private final TaskSchedulerService taskSchedulerService;
 
     public static void main(String[] args) {
-        log.info("Initializing app...");
+        log.info("Initializing the application...");
+        Platform.setImplicitExit(false);
         launch();
     }
 
+    public DotoiApplication() {
+        log.info("Creating the task model...");
+        this.taskService = new TaskService(new TaskRepository());
+        this.taskSchedulerService = new TaskSchedulerService();
+    }
+
     @Override
-    public void start(Stage stage) throws IOException {
-        log.info("Initializing GUI...");
-        ResourceBundle bundle = createResourceBundle();
+    public void start(Stage stage) {
+        TranslationManager.getInstance().setLocale(Locale.getDefault()); ///< TODO: Will be switched with .forLanguageTag(...) or equivalent for model with those settings.
 
-        FXMLLoader loader = new FXMLLoader(DotoiApplication.class.getResource("/fxml/task-list-view.fxml"), bundle);
-        Scene scene = new Scene(loader.load());
-        Controller controller = loader.getController();
-        controller.setStage(stage);
-        controller.setBundle(bundle);
-
-        setupStage(stage, scene, bundle);
-        log.info("GUI initialized successfully.");
+        log.info("Creating system tray...");
+        setupSystemTray();
     }
 
-    /**
-     * Returns appropriate {@link ResourceBundle} based on the language setting.
-     *
-     * <p> // @param TODO
-     * @return The loaded {@link ResourceBundle}.
-     * */
-    private ResourceBundle createResourceBundle(/* TODO: Model with settings goes here */) {
-        Locale locale = Locale.getDefault(); ///< TODO: Will be switched with .forLanguageTag(...);
-        log.debug("Locale set to {}.", locale);
+    private void setupSystemTray() {
+        /*
+        * Main reason of separated thread usage is: macOS
+        * TODO: Maybe moved to separated class.
+        * */
+        new Thread(() -> {
+            SystemTray tray = SystemTray.get();
+            URL iconUrl = getClass().getResource("/images/dotoi-icon.png");
+            if (iconUrl != null) tray.setImage(iconUrl);
+            else log.error("Couldn't load tray icon.");
 
-        return ResourceBundle.getBundle("i18n.localization", locale);
-    }
+            tray.getMenu().add(new MenuItem(
+                TranslationManager.getInstance().translate("tray.task-list"),
+                evt -> WindowManager.getInstance().openWindow("general.title", new TaskListWindow())
+            ));
+            tray.getMenu().add(new MenuItem(
+                TranslationManager.getInstance().translate("tray.exit"),
+                evt -> {
+                    WindowManager.getInstance().closeAllWindows();
+                    taskSchedulerService.shutdown();
+                    tray.shutdown();
+                    System.exit(0);
+                }
+            ));
+            tray.getMenu().add(new MenuItem(
+                TranslationManager.getInstance().translate("tray.settings"),
+                evt -> log.debug("Open settings window.")
+            ));
 
-    /**
-     * Sets up the {@link Stage} instance.
-     *
-     * @param stage A {@link Stage} to be configured.
-     * @param scene A {@link Scene} to be attached to the given {@link Stage}.
-     * @param bundle A {@link ResourceBundle} used in localization.
-     * */
-    private void setupStage(@NotNull Stage stage, Scene scene, @NotNull ResourceBundle bundle) {
-        log.debug("Configuring stage...");
-        if (bundle.containsKey(APPLICATION_NAME))
-            stage.setTitle(bundle.getString(APPLICATION_NAME));
+            // TODO: Maybe temporary.
+            tray.getMenu().add(new Separator());
 
-        stage.setScene(scene);
-        stage.show();
+            tray.getMenu().add(new MenuItem(
+                    TranslationManager.getInstance().translate("tray.task"),
+                    evt -> WindowManager.getInstance().openWindow("tray.task", new TaskWindow())
+            ));
+            log.debug("System tray has been successfully initialized.");
+        }).start();
     }
 }
