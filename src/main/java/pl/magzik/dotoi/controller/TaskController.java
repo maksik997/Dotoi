@@ -13,6 +13,7 @@ import pl.magzik.dotoi.manager.data.DataEvent;
 import pl.magzik.dotoi.model.Task;
 import pl.magzik.dotoi.util.ApplicationUtils;
 import pl.magzik.dotoi.util.MarkdownUtils;
+import pl.magzik.dotoi.view.DateTimePicker;
 import pl.magzik.dotoi.view.list.ApplicationListCell;
 import pl.magzik.dotoi.viewmodel.TaskViewModel;
 
@@ -124,6 +125,8 @@ public class TaskController extends Controller {
 
     @FXML
     public void handleDateSelection() {
+        var t = DateTimePicker.showAndWait(getStage(), LocalDateTime.now());
+        log.debug("Picked date and time: {}", t);
         /* TODO:
          *   Open a dialog with date selection.
          * */
