@@ -49,6 +49,7 @@
                                editable="false"
                     />
                     <Button focusTraversable="false"
+                            fx:id="deadlineButton"
                             onAction="#handleDateSelection"
                     >
                         <graphic>

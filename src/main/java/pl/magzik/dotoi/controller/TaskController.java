@@ -77,6 +77,9 @@ public class TaskController extends Controller {
     private Label creationDateLabel;
 
     @FXML
+    private Button deadlineButton;
+
+    @FXML
     private void initialize() {
         applicationsListView.setCellFactory(param -> new ApplicationListCell());
 
@@ -97,9 +100,13 @@ public class TaskController extends Controller {
                 .map(File::new)
                 .forEach(f -> applicationsListView.getItems().add(f));
 
+        deadlineButton.setDisable(true);
+        deadlineCheckbox.setOnAction(evt -> {
+            deadlineButton.setDisable(!deadlineCheckbox.isSelected());
+        });
 
         /* TODO:
-         *   Add handling for Deadline, RecurrenceRule
+         *   Add handling for RecurrenceRule
          *  */
     }
 
@@ -125,11 +132,10 @@ public class TaskController extends Controller {
 
     @FXML
     public void handleDateSelection() {
-        var t = DateTimePicker.showAndWait(getStage(), LocalDateTime.now());
-        log.debug("Picked date and time: {}", t);
-        /* TODO:
-         *   Open a dialog with date selection.
-         * */
+         DateTimePicker.showAndWait(getStage(), LocalDateTime.now()).ifPresent(d -> {
+             deadlineTextField.setText(String.valueOf(d).replace('T', ' '));
+             task.deadlineProperty().setValue(d);
+         });
     }
 
     @FXML
